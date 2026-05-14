@@ -1,0 +1,29 @@
+import urllib.request
+import urllib.parse
+import json
+
+city = input(“Enter city name: “)
+
+city = urllib.parse.quote(city)
+
+url = f”https://wttr.in/{city}?format=j1”
+
+try:
+    print(“Fetching data...”)  # debug line
+
+    response = urllib.request.urlopen(url)
+    raw_data = response.read().decode(“utf-8”)  # IMPORTANT FIX
+
+    data = json.loads(raw_data)
+
+    current = data[“current_condition”][0]
+
+    print(“\nWeather Report”)
+    print(“City:”, city)
+    print(“Temperature:”, current[“temp_C”], “°C”)
+    print(“Humidity:”, current[“humidity”], “%”)
+    print(“Condition:”, current[“weatherDesc”][0][“value”])
+
+except Exception as e:
+    print(“Error fetching weather data ”)
+    print(“Real error:”, e)
